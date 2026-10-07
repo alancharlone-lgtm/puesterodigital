@@ -3,119 +3,276 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Visor Corral</title>
-<meta name="description" content="Visión artificial para engorde: los minutos de comedero de cada animal, todos los días, con las cámaras del campo y un lector de caravanas en el bebedero.">
+<title>Puestero Digital</title>
+<meta name="description" content="Puestero Digital: visión artificial para corrales de engorde. Minutos de comedero de cada animal, todos los días, con las cámaras del campo y un lector de caravanas en el bebedero.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --fondo: #f7f5f0; --superficie: #ffffff; --tinta: #1d2420; --tinta-2: #4a554e; --tenue: #7b857f;
-    --acento: #2f6b3f; --acento-suave: #e3eee5; --borde: #e2ded4;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root { --fondo: #141816; --superficie: #1c211e; --tinta: #eef1ec; --tinta-2: #c3cbc4; --tenue: #8f9a92;
-            --acento: #7fc08f; --acento-suave: #24342a; --borde: #2c332e; }
+    --fondo: #f4efe6; --papel: #fbf8f2; --tinta: #1f2a22; --tinta-2: #4b5a4f; --tenue: #7d887f;
+    --pasto: #2f5d3a; --pasto-2: #3f7a4c; --tierra: #b8742f; --suave: #e7dfd0; --borde: #ddd3c1;
+    --oscuro: #18211b; --oscuro-2: #222d25;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--fondo); color: var(--tinta);
-         font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  .cont { max-width: 960px; margin: 0 auto; padding: 0 16px; }
-  header { padding: 20px 0; }
-  .marca { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; letter-spacing: .2px; }
-  .marca svg { width: 30px; height: 30px; color: var(--acento); }
-  .heroe { padding-top: 48px; padding-bottom: 40px; }
-  h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.15; margin: 0 0 16px; letter-spacing: -.5px; }
-  .bajada { font-size: clamp(18px, 2.4vw, 21px); color: var(--tinta-2); max-width: 720px; margin: 0 0 28px; }
-  .boton { display: inline-block; background: var(--acento); color: var(--fondo); text-decoration: none;
-           padding: 12px 20px; border-radius: 10px; font-weight: 600; }
-  section { padding: 36px 0; border-top: 1px solid var(--borde); }
-  h2 { font-size: 26px; margin: 0 0 14px; letter-spacing: -.2px; }
-  p { margin: 0 0 12px; color: var(--tinta-2); max-width: 760px; }
-  .pasos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 18px; }
-  .paso { background: var(--superficie); border: 1px solid var(--borde); border-radius: 14px; padding: 20px; }
-  .num { display: inline-flex; width: 30px; height: 30px; border-radius: 50%; background: var(--acento-suave);
-         color: var(--acento); font-weight: 700; align-items: center; justify-content: center; margin-bottom: 10px; }
-  .paso h3 { margin: 0 0 6px; font-size: 18px; color: var(--tinta); }
-  .paso p { margin: 0; font-size: 16px; }
-  .estado { display: grid; gap: 10px; margin: 14px 0 0; padding: 0; list-style: none; max-width: 760px; }
-  .estado li { padding-left: 26px; position: relative; color: var(--tinta-2); }
-  .estado li::before { content: ""; position: absolute; left: 4px; top: .62em; width: 10px; height: 10px;
-                       border-radius: 50%; background: var(--acento); }
-  .estado li.prox::before { background: transparent; border: 2px solid var(--acento); width: 8px; height: 8px; }
-  footer { padding: 28px 0 40px; border-top: 1px solid var(--borde); color: var(--tenue); font-size: 15px; }
-  a { color: var(--acento); }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--fondo); color: var(--tinta); font: 17px/1.65 Inter, system-ui, sans-serif; }
+  .c { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+  h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 650; letter-spacing: -0.01em; }
+  a { color: inherit; }
+
+  /* barra */
+  .barra { position: sticky; top: 0; z-index: 10; background: rgba(244,239,230,.88); backdrop-filter: blur(8px);
+           border-bottom: 1px solid var(--borde); }
+  .barra .c { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .marca { display: flex; align-items: center; gap: 10px; font-family: Fraunces, serif; font-weight: 650; font-size: 21px; text-decoration: none; }
+  .marca svg { width: 30px; height: 30px; }
+  .menu { display: flex; gap: 26px; align-items: center; font-size: 15px; }
+  .menu a { text-decoration: none; color: var(--tinta-2); }
+  .menu a.cta { color: var(--papel); background: var(--pasto); padding: 9px 16px; border-radius: 8px; font-weight: 600; }
+  @media (max-width: 760px) { .menu a:not(.cta) { display: none; } }
+
+  /* portada */
+  .portada { padding: 72px 0 64px; }
+  .portada .c { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
+  @media (max-width: 900px) { .portada .c { grid-template-columns: 1fr; } }
+  .etiqueta { display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+              color: var(--tierra); margin-bottom: 14px; }
+  h1 { font-size: clamp(38px, 5.4vw, 60px); line-height: 1.04; margin: 0 0 20px; }
+  h1 em { font-style: italic; color: var(--pasto); }
+  .bajada { font-size: 19px; color: var(--tinta-2); margin: 0 0 30px; max-width: 34em; }
+  .botones { display: flex; gap: 12px; flex-wrap: wrap; }
+  .b1, .b2 { text-decoration: none; padding: 13px 22px; border-radius: 10px; font-weight: 600; font-size: 16px; }
+  .b1 { background: var(--pasto); color: var(--papel); }
+  .b2 { border: 1.5px solid var(--tinta); color: var(--tinta); }
+
+  /* panel de ejemplo */
+  .panel { background: var(--oscuro); color: #e9efe9; border-radius: 18px; padding: 18px; box-shadow: 0 24px 60px -24px rgba(24,33,27,.55); }
+  .panel .cab { display: flex; justify-content: space-between; font-size: 13px; color: #9fb0a3; margin-bottom: 12px; }
+  .vista { background: var(--oscuro-2); border-radius: 12px; overflow: hidden; }
+  .vista svg { display: block; width: 100%; height: auto; }
+  .filas { margin-top: 14px; display: grid; gap: 8px; }
+  .fila { display: grid; grid-template-columns: 70px 1fr 64px; align-items: center; gap: 10px; font-size: 14px; }
+  .barra-min { height: 8px; border-radius: 4px; background: #33423a; overflow: hidden; }
+  .barra-min span { display: block; height: 100%; background: #7fbf8c; border-radius: 4px; }
+  .fila.alerta .barra-min span { background: #e0a052; }
+  .fila .min { text-align: right; color: #c9d6cc; font-variant-numeric: tabular-nums; }
+  .fila.alerta .min { color: #f0b36a; font-weight: 600; }
+  .nota { font-size: 12px; color: #7f9184; margin-top: 10px; }
+
+  section { padding: 84px 0; }
+  .titulo { max-width: 680px; margin-bottom: 40px; }
+  .titulo h2 { font-size: clamp(30px, 3.6vw, 42px); line-height: 1.1; margin: 0 0 12px; }
+  .titulo p { color: var(--tinta-2); margin: 0; font-size: 18px; }
+
+  /* problema */
+  .problema { background: var(--papel); border-top: 1px solid var(--borde); border-bottom: 1px solid var(--borde); }
+  .tres { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  @media (max-width: 860px) { .tres { grid-template-columns: 1fr; } }
+  .dato { border-left: 3px solid var(--tierra); padding: 4px 0 4px 18px; }
+  .dato h3 { font-size: 21px; margin: 0 0 8px; }
+  .dato p { margin: 0; color: var(--tinta-2); }
+
+  /* como funciona */
+  .pasos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; counter-reset: paso; }
+  @media (max-width: 860px) { .pasos { grid-template-columns: 1fr; } }
+  .paso { background: var(--papel); border: 1px solid var(--borde); border-radius: 16px; padding: 26px; position: relative; }
+  .paso::before { counter-increment: paso; content: "0" counter(paso); font-family: Fraunces, serif; font-size: 15px;
+                  color: var(--tierra); font-weight: 650; }
+  .paso h3 { font-size: 22px; margin: 10px 0 8px; }
+  .paso p { margin: 0; color: var(--tinta-2); font-size: 16px; }
+  .icono { width: 44px; height: 44px; border-radius: 12px; background: var(--suave); display: grid; place-items: center;
+           position: absolute; top: 22px; right: 22px; color: var(--pasto); }
+  .icono svg { width: 22px; height: 22px; }
+
+  /* oscuro */
+  .oscura { background: var(--oscuro); color: #e9efe9; }
+  .oscura .titulo p { color: #a9b8ad; }
+  .dos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  @media (max-width: 760px) { .dos { grid-template-columns: 1fr; } }
+  .item { background: var(--oscuro-2); border: 1px solid #2f3b33; border-radius: 14px; padding: 22px; }
+  .item h3 { margin: 0 0 6px; font-size: 20px; color: #f1f5f1; }
+  .item p { margin: 0; color: #a9b8ad; font-size: 16px; }
+
+  /* estado */
+  .linea { display: grid; gap: 0; max-width: 760px; }
+  .hito { display: grid; grid-template-columns: 28px 1fr; gap: 16px; padding-bottom: 26px; position: relative; }
+  .hito::before { content: ""; position: absolute; left: 13px; top: 22px; bottom: 0; width: 2px; background: var(--borde); }
+  .hito:last-child::before { display: none; }
+  .punto { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--pasto); background: var(--fondo); margin-top: 2px; }
+  .hito.hecho .punto { background: var(--pasto); }
+  .hito h3 { margin: 0 0 4px; font-size: 20px; }
+  .hito p { margin: 0; color: var(--tinta-2); }
+
+  /* contacto */
+  .contacto { background: var(--pasto); color: var(--papel); border-radius: 22px; padding: 48px; display: grid;
+              grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: center; }
+  @media (max-width: 760px) { .contacto { grid-template-columns: 1fr; padding: 32px; } }
+  .contacto h2 { margin: 0 0 10px; font-size: clamp(28px, 3.4vw, 38px); }
+  .contacto p { margin: 0; color: #dbe8dd; }
+  .contacto a.b3 { justify-self: end; background: var(--papel); color: var(--pasto); text-decoration: none; padding: 15px 24px;
+                   border-radius: 10px; font-weight: 600; }
+  @media (max-width: 760px) { .contacto a.b3 { justify-self: start; } }
+  footer { padding: 36px 0 48px; color: var(--tenue); font-size: 14px; }
+  footer .c { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
 </style>
 </head>
 <body>
-  <header>
-    <div class="cont marca">
-      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M3 16c3.5-6 8-9 13-9s9.5 3 13 9c-3.5 6-8 9-13 9S6.5 22 3 16z"/><circle cx="16" cy="16" r="4.5"/>
+
+<header class="barra">
+  <div class="c">
+    <a class="marca" href="#">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="30" height="30" rx="8" fill="#2f5d3a"/>
+        <path d="M7 16c2.6-4.4 5.6-6.6 9-6.6s6.4 2.2 9 6.6c-2.6 4.4-5.6 6.6-9 6.6S9.6 20.4 7 16z" stroke="#fbf8f2" stroke-width="2"/>
+        <circle cx="16" cy="16" r="3.2" fill="#e0a052"/>
       </svg>
-      Visor Corral
-    </div>
-  </header>
+      Puestero Digital
+    </a>
+    <nav class="menu">
+      <a href="#como">Cómo funciona</a>
+      <a href="#por-que">Por qué</a>
+      <a href="#estado">Dónde estamos</a>
+      <a class="cta" href="#contacto">Sumate al piloto</a>
+    </nav>
+  </div>
+</header>
 
-  <main>
-    <div class="cont heroe">
-      <h1>Cada animal, medido.<br>Todos los días.</h1>
-      <p class="bajada">Visión artificial para el engorde: con las cámaras que el campo ya tiene y un lector de caravanas en el
-        bebedero, medimos cuántos minutos come cada animal y avisamos temprano cuando uno empieza a comer menos.</p>
-      <a class="boton" href="mailto:contacto@visorcorral.com">Escribinos</a>
-    </div>
-
-    <section>
-      <div class="cont">
-        <h2>El problema</h2>
-        <p>En un corral, el animal que come menos se descubre tarde: cuando ya perdió kilos. Mirarlos uno por uno lleva
-          tiempo, y pesarlos seguido estresa a la hacienda y cuesta plata.</p>
-      </div>
-    </section>
-
-    <section>
-      <div class="cont">
-        <h2>Cómo funciona</h2>
-        <div class="pasos">
-          <div class="paso"><div class="num">1</div><h3>El bebedero pone el nombre</h3>
-            <p>Cuando el animal toma agua, el lector lee su caravana y la cámara ve cómo es. Así cada animal tiene su
-              identidad verificada, todos los días.</p></div>
-          <div class="paso"><div class="num">2</div><h3>La cámara lo sigue</h3>
-            <p>Un seguidor visual lo acompaña del bebedero al comedero, aunque se cruce con otros animales.</p></div>
-          <div class="paso"><div class="num">3</div><h3>Los minutos se vuelven alertas</h3>
-            <p>Minutos de comedero por animal y por día. Si alguno empieza a comer menos, avisamos antes de que pierda
-              kilos.</p></div>
+<main>
+  <div class="portada">
+    <div class="c">
+      <div>
+        <span class="etiqueta">Visión artificial para el engorde</span>
+        <h1>El puestero que mira a <em>cada animal</em>, todo el día.</h1>
+        <p class="bajada">Con las cámaras que el campo ya tiene y un lector de caravanas en el bebedero, medimos cuántos
+          minutos come cada animal y te avisamos apenas uno empieza a comer menos, antes de que pierda kilos.</p>
+        <div class="botones">
+          <a class="b1" href="#contacto">Quiero probarlo</a>
+          <a class="b2" href="#como">Cómo funciona</a>
         </div>
       </div>
-    </section>
 
-    <section>
-      <div class="cont">
-        <h2>Por qué importa</h2>
-        <p>El objetivo es simple: más kilos de carne por animal y menos costo por kilo. Detectar a tiempo al animal que
-          no come es actuar antes de perder producción.</p>
+      <div class="panel" role="img" aria-label="Ejemplo ilustrativo del panel: vista del corral desde la cámara y minutos de comedero por animal">
+        <div class="cab"><span>Corral 3 · cámara del comedero</span><span>hoy</span></div>
+        <div class="vista">
+          <svg viewBox="0 0 420 210" aria-hidden="true">
+            <rect width="420" height="210" fill="#26332a"/>
+            <rect x="0" y="160" width="420" height="50" fill="#2d3c31"/>
+            <rect x="0" y="152" width="420" height="10" fill="#4a5a4c"/>
+            <g fill="#3d4d41">
+              <ellipse cx="70" cy="120" rx="44" ry="20"/><ellipse cx="170" cy="112" rx="46" ry="21"/>
+              <ellipse cx="275" cy="122" rx="44" ry="20"/><ellipse cx="365" cy="108" rx="40" ry="19"/>
+            </g>
+            <g fill="none" stroke-width="2.5">
+              <rect x="22" y="96" width="96" height="48" rx="6" stroke="#7fbf8c"/>
+              <rect x="120" y="87" width="100" height="50" rx="6" stroke="#7fbf8c"/>
+              <rect x="227" y="98" width="96" height="48" rx="6" stroke="#e0a052"/>
+              <rect x="321" y="85" width="88" height="46" rx="6" stroke="#7fbf8c"/>
+            </g>
+            <g font-family="Inter, sans-serif" font-size="12" font-weight="600">
+              <rect x="22" y="78" width="42" height="17" rx="4" fill="#7fbf8c"/><text x="29" y="91" fill="#18211b">1043</text>
+              <rect x="120" y="69" width="42" height="17" rx="4" fill="#7fbf8c"/><text x="127" y="82" fill="#18211b">0871</text>
+              <rect x="227" y="80" width="42" height="17" rx="4" fill="#e0a052"/><text x="234" y="93" fill="#18211b">1127</text>
+              <rect x="321" y="67" width="42" height="17" rx="4" fill="#7fbf8c"/><text x="328" y="80" fill="#18211b">0956</text>
+            </g>
+          </svg>
+        </div>
+        <div class="filas">
+          <div class="fila"><span>1043</span><div class="barra-min"><span style="width:82%"></span></div><span class="min">164 min</span></div>
+          <div class="fila"><span>0871</span><div class="barra-min"><span style="width:76%"></span></div><span class="min">152 min</span></div>
+          <div class="fila alerta"><span>1127</span><div class="barra-min"><span style="width:41%"></span></div><span class="min">82 min ▼</span></div>
+          <div class="fila"><span>0956</span><div class="barra-min"><span style="width:79%"></span></div><span class="min">158 min</span></div>
+        </div>
+        <div class="nota">Ejemplo ilustrativo del panel. Los números no son datos reales.</div>
       </div>
-    </section>
+    </div>
+  </div>
 
-    <section>
-      <div class="cont">
+  <section class="problema" id="por-que">
+    <div class="c">
+      <div class="titulo">
+        <h2>El animal que come menos se descubre tarde.</h2>
+        <p>Cuando se nota a simple vista, ya perdió kilos. Recorrer el corral uno por uno no alcanza, y pesar seguido estresa a la hacienda.</p>
+      </div>
+      <div class="tres">
+        <div class="dato"><h3>Cada animal, no el promedio</h3><p>El corral puede ir bien en promedio y tener varios animales quedándose atrás. Lo vemos de a uno.</p></div>
+        <div class="dato"><h3>Todos los días</h3><p>La cámara mira las 24 horas. No depende de que alguien esté recorriendo en el momento justo.</p></div>
+        <div class="dato"><h3>Con lo que ya hay</h3><p>Usamos las cámaras instaladas y un lector de caravanas en el bebedero. Sin tocar a los animales.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="como">
+    <div class="c">
+      <div class="titulo">
+        <h2>Cómo funciona</h2>
+        <p>Tres piezas simples que, juntas, siguen a cada animal desde que toma agua hasta que come.</p>
+      </div>
+      <div class="pasos">
+        <div class="paso">
+          <div class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3c3 4 6 7.5 6 11a6 6 0 0 1-12 0c0-3.5 3-7 6-11z"/></svg></div>
+          <h3>El bebedero le pone nombre</h3>
+          <p>Cuando el animal toma agua, el lector lee su caravana y la cámara registra cómo es. Así cada animal tiene su identidad verificada, todos los días.</p>
+        </div>
+        <div class="paso">
+          <div class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/></svg></div>
+          <h3>La cámara lo sigue</h3>
+          <p>Un seguidor visual lo acompaña del bebedero al comedero, aunque se mezcle o se cruce con otros animales.</p>
+        </div>
+        <div class="paso">
+          <div class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg></div>
+          <h3>Los minutos se vuelven alertas</h3>
+          <p>Minutos de comedero por animal y por día. Si uno empieza a comer menos que de costumbre, te avisamos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="oscura">
+    <div class="c">
+      <div class="titulo">
+        <h2>Pensado para producir más kilos</h2>
+        <p>El objetivo no es la tecnología: es más carne por animal y menos costo por kilo.</p>
+      </div>
+      <div class="dos">
+        <div class="item"><h3>Actuar antes</h3><p>Detectar a tiempo al animal que no come permite revisarlo antes de perder producción.</p></div>
+        <div class="item"><h3>Sin manejo extra</h3><p>No hay que encerrar, pesar ni tocar a los animales para saber cómo están comiendo.</p></div>
+        <div class="item"><h3>Identidad confiable</h3><p>La caravana leída en el bebedero ancla la identidad cada día: el sistema no adivina quién es quién.</p></div>
+        <div class="item"><h3>Liviano</h3><p>Trabajamos para que corra en equipos chicos, cerca del corral, sin depender de una conexión pesada.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="estado">
+    <div class="c">
+      <div class="titulo">
         <h2>Dónde estamos</h2>
-        <ul class="estado">
-          <li>Prototipo en validación, desarrollado en Argentina.</li>
-          <li>Seguimiento individual y reconocimiento de cada animal, probados sobre videos públicos de investigación de
-            corrales.</li>
-          <li class="prox">Próximo paso: piloto en campo con una cámara y un lector de caravanas en el bebedero.</li>
-          <li class="prox">En investigación: estimar el peso por visión en el mismo bebedero.</li>
-        </ul>
+        <p>Somos un proyecto argentino en etapa de prototipo. Contamos lo que está hecho y lo que falta.</p>
       </div>
-    </section>
-
-    <section>
-      <div class="cont">
-        <h2>Contacto</h2>
-        <p>¿Tenés un corral y querés ser parte del piloto? Escribinos a
-          <a href="mailto:contacto@visorcorral.com">contacto@visorcorral.com</a>.</p>
+      <div class="linea">
+        <div class="hito hecho"><div class="punto"></div><div><h3>Seguimiento individual</h3><p>Probado sobre videos públicos de investigación de corrales: seguir a cada animal y reconocerlo cuando se mezcla.</p></div></div>
+        <div class="hito hecho"><div class="punto"></div><div><h3>Versión liviana</h3><p>En desarrollo una versión más chica del seguidor, para correr en equipos de bajo costo.</p></div></div>
+        <div class="hito"><div class="punto"></div><div><h3>Piloto en campo</h3><p>Próximo paso: una cámara y un lector de caravanas en el bebedero de un corral real.</p></div></div>
+        <div class="hito"><div class="punto"></div><div><h3>Peso por visión</h3><p>En investigación: estimar el peso de cada animal en el mismo bebedero.</p></div></div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <footer><div class="cont">© 2026 Visor Corral · Argentina</div></footer>
+  <section id="contacto" style="padding-top:20px">
+    <div class="c">
+      <div class="contacto">
+        <div>
+          <h2>¿Tenés un corral? Sumate al piloto.</h2>
+          <p>Buscamos productores que quieran probarlo con nosotros. Escribinos y te contamos qué hace falta.</p>
+        </div>
+        <a class="b3" href="mailto:contacto@puesterodigital.com">contacto@puesterodigital.com</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="c"><span>© 2026 Puestero Digital · Argentina</span><span>Visión artificial para la ganadería</span></div>
+</footer>
 </body>
 </html>
